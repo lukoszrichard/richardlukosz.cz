@@ -22,9 +22,10 @@
         p { color: #888; font-size: 1.2rem; }
 
         .lang-switcher {
-            position: absolute;
+            position: fixed; 
             top: 20px;
             right: 20px;
+            z-index: 100; 
         }
         .lang-btn {
             background: #333;
@@ -43,7 +44,7 @@
         .lang-en { display: none; }
 
         .hamburger-btn {
-            position: absolute;
+            position: fixed; 
             top: 15px;
             left: 20px;
             background: none;
@@ -115,7 +116,7 @@
             if (currentLang === 'cs') {
                 csElements.forEach(el => el.style.display = 'none');
                 enElements.forEach(el => el.style.display = 'inline-block');
-                btn.innerText = 'CS';
+                btn.innerText = 'CZ';
                 currentLang = 'en';
             } else {
                 csElements.forEach(el => el.style.display = 'inline-block');
