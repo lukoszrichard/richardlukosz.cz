@@ -13,13 +13,23 @@
             flex-direction: column; 
             justify-content: center; 
             align-items: center; 
-            height: 100vh; 
+            min-height: 100vh; 
             margin: 0; 
             text-align: center; 
             position: relative;
+            padding: 40px 20px; 
+            box-sizing: border-box;
         }
         h1 { font-size: 3rem; margin-bottom: 10px; }
-        p { color: #888; font-size: 1.2rem; }
+        p { color: #888; font-size: 1.2rem; margin-bottom: 30px; }
+
+        .foto-obrazu {
+            max-width: 100%; 
+            width: 450px; 
+            height: auto; 
+            border-radius: 12px; 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); 
+        }
 
         .lang-switcher {
             position: absolute;
@@ -56,6 +66,13 @@
     
     <p>1 + 1 = 2</p>
 
+    <img src="art1.jpg" alt="Obraz z muzea" class="foto-obrazu">
+
+    <div style="color: #666; font-size: 0.85rem; margin-top: 10px; font-style: italic;">
+        <span class="lang-cs">Foto pořízené v muzeu Rijksmuseum, Amsterdam, Nizozemí, duben 2026.</span>
+        <span class="lang-en">Photo taken in the Rijksmuseum museum, Amsterdam, The Netherlands, April 2026.</span>
+    </div>
+
     <script>
         let currentLang = 'cs';
 
@@ -67,7 +84,7 @@
             if (currentLang === 'cs') {
                 csElements.forEach(el => el.style.display = 'none');
                 enElements.forEach(el => el.style.display = 'inline-block');
-                btn.innerText = 'CZ';
+                btn.innerText = 'CS';
                 currentLang = 'en';
             } else {
                 csElements.forEach(el => el.style.display = 'inline-block');
