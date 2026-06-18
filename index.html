@@ -5,13 +5,77 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NIC</title>
     <style>
-        body { font-family: sans-serif; background: #1a1a1a; color: #fff; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; margin: 0; text-align: center; }
+        body { 
+            font-family: sans-serif; 
+            background: #1a1a1a; 
+            color: #fff; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            margin: 0; 
+            text-align: center; 
+            position: relative;
+        }
         h1 { font-size: 3rem; margin-bottom: 10px; }
         p { color: #888; font-size: 1.2rem; }
+
+        .lang-switcher {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        .lang-btn {
+            background: #333;
+            color: #fff;
+            border: 1px solid #555;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            transition: 0.2s;
+        }
+        .lang-btn:hover {
+            background: #444;
+        }
+
+        .lang-en { display: none; }
     </style>
 </head>
 <body>
-    <h1>NIC</h1>
+
+    <div class="lang-switcher">
+        <button class="lang-btn" id="langToggle" onclick="toggleLanguage()">EN</button>
+    </div>
+
+    <h1>
+        <span class="lang-cs">NIC</span>
+        <span class="lang-en">NOTHING</span>
+    </h1>
+    
     <p>1 + 1 = 2</p>
+
+    <script>
+        let currentLang = 'cs';
+
+        function toggleLanguage() {
+            const csElements = document.querySelectorAll('.lang-cs');
+            const enElements = document.querySelectorAll('.lang-en');
+            const btn = document.getElementById('langToggle');
+
+            if (currentLang === 'cs') {
+                csElements.forEach(el => el.style.display = 'none');
+                enElements.forEach(el => el.style.display = 'inline-block');
+                btn.innerText = 'CZ';
+                currentLang = 'en';
+            } else {
+                csElements.forEach(el => el.style.display = 'inline-block');
+                enElements.forEach(el => el.style.display = 'none');
+                btn.innerText = 'EN';
+                currentLang = 'cs';
+            }
+        }
+    </script>
 </body>
 </html>
