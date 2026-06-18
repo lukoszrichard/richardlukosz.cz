@@ -51,11 +51,56 @@
         }
 
         .lang-en { display: none; }
+
+        .hamburger-btn {
+            position: absolute;
+            top: 15px;
+            left: 20px;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 2rem;
+            cursor: pointer;
+            z-index: 100; 
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            left: -100%; 
+            width: 250px;
+            height: 100vh;
+            background: #111;
+            box-shadow: 5px 0 15px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            padding: 80px 20px;
+            box-sizing: border-box;
+            transition: 0.3s ease; 
+            z-index: 99;
+        }
+
+        .mobile-menu.open {
+            left: 0; 
+        }
+
+        .menu-link {
+            color: #888;
+            font-size: 1.2rem;
+            text-decoration: none;
+            margin-bottom: 20px;
+            transition: 0.2s;
+        }
+        .menu-link:hover, .menu-link.active {
+            color: #fff;
+        }
     </style>
 </head>
-<body> <nav style="margin-top: 20px; font-size: 1.1rem;">
-        <a href="index.html" style="color: #fff; margin: 0 15px; text-decoration: none; font-weight: bold;">Domů</a>
-        <a href="test.html" style="color: #888; margin: 0 15px; text-decoration: none;">TEST</a>
+<body> <button class="hamburger-btn" onclick="toggleMenu()">☰</button>
+
+    <nav class="mobile-menu" id="mobileMenu">
+        <a href="index.html" class="menu-link active">Domů / Home</a>
+        <a href="galerie.html" class="menu-link">TEST</a>
     </nav>
 
     <div class="lang-switcher">
@@ -109,6 +154,10 @@
                 btn.innerText = 'EN';
                 currentLang = 'cs';
             }
+        }
+        function toggleMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('open'); 
         }
     </script>
 </body>
