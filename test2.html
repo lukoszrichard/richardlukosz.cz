@@ -69,6 +69,16 @@
             font-style: italic;
         }
 
+        .wiki-link {
+            color: #8ab4f8;
+            text-decoration: none;
+            margin-left: 4px;
+            font-weight: bold;
+        }
+        .wiki-link:hover {
+            text-decoration: underline;
+        }
+
         .lang-switcher {
             position: fixed; 
             top: 20px;
@@ -167,8 +177,14 @@
         
         <figcaption>
             <div class="art-author">
-                <span class="lang-cs">Autor: Jan Asselijn, rok ~1650</span>
-                <span class="lang-en">Author: Jan Asselijn, year ~1650</span>
+                <span class="lang-cs">
+                    Autor: Jan Asselijn, rok ~1650 
+                    <a href="https://en.wikipedia.org/wiki/The_Threatened_Swan" target="_blank" rel="noopener noreferrer" class="wiki-link">[Wikipedie]</a>
+                </span>
+                <span class="lang-en">
+                    Author: Jan Asselijn, year ~1650 
+                    <a href="https://en.wikipedia.org/wiki/The_Threatened_Swan" target="_blank" rel="noopener noreferrer" class="wiki-link">[Wikipedia]</a>
+                </span>
             </div>
             
             <div class="art-meta">
