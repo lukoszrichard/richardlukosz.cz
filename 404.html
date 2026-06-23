@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Nenalezeno / Not Found</title>
+    <style>
+        body { 
+            font-family: sans-serif; 
+            background: #1a1a1a; 
+            color: #fff; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            margin: 0; 
+            text-align: center; 
+            padding: 40px 20px; 
+            box-sizing: border-box;
+        }
+
+        body:not(.lang-en-active) .lang-en { display: none; }
+        body.lang-en-active .lang-cs { display: none; }
+
+        h1 { 
+            font-size: 6rem; 
+            margin: 0; 
+            color: #555;
+            letter-spacing: 5px;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            color: #aaa;
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+        }
+
+        .back-btn {
+            background: #fff;
+            color: #1a1a1a;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .back-btn:hover {
+            background: #ccc;
+        }
+
+        .lang-switcher {
+            position: fixed; 
+            top: 20px;
+            right: 20px;
+            z-index: 100; 
+        }
+        
+        .lang-btn {
+            background: #333;
+            color: #fff;
+            border: 1px solid #555;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            transition: 0.2s;
+        }
+        
+        .lang-btn:hover {
+            background: #444;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="lang-switcher">
+        <button class="lang-btn" id="langToggle" onclick="toggleLanguage()">EN</button>
+    </div>
+
+    <h1>404</h1>
+    
+    <h2>
+        <span class="lang-cs">Jejda! Tady nic není.</span>
+        <span class="lang-en">Oops! Nothing here.</span>
+    </h2>
+    
+    <p>
+        <span class="lang-cs">Stránka, kterou hledáte, neexistuje, nebo byla přesunuta.</span>
+        <span class="lang-en">The page you are looking for doesn't exist or has been moved.</span>
+    </p>
+
+    <a href="/" class="back-btn">
+        <span class="lang-cs">Zpět na domovskou stránku</span>
+        <span class="lang-en">Back to homepage</span>
+    </a>
+
+    <script>
+        function toggleLanguage() {
+            const body = document.body;
+            const btn = document.getElementById('langToggle');
+
+            body.classList.toggle('lang-en-active');
+
+            if (body.classList.contains('lang-en-active')) {
+                btn.innerText = 'CZ';
+            } else {
+                btn.innerText = 'EN';
+            }
+        }
+    </script>
+</body>
+</html>
