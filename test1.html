@@ -102,7 +102,7 @@
 </nav>
 
     <div class="lang-switcher">
-        <button class="lang-btn" id="langToggle" onclick="toggleLanguage()">🇬🇧 EN</button>
+        <button class="lang-btn" id="langToggle" onclick="toggleLanguage()">EN</button>
     </div>
 
     <h1>
@@ -148,12 +148,12 @@
             if (currentLang === 'cs') {
                 csElements.forEach(el => el.style.display = 'none');
                 enElements.forEach(el => el.style.display = 'inline-block');
-                btn.innerText = '🇨🇿 CZ';
+                btn.innerText = 'CZ';
                 currentLang = 'en';
             } else {
                 csElements.forEach(el => el.style.display = 'inline-block');
                 enElements.forEach(el => el.style.display = 'none');
-                btn.innerText = '🇬🇧 EN';
+                btn.innerText = 'EN';
                 currentLang = 'cs';
             }
         }
