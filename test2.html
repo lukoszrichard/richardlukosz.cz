@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Hry / Games</title>
+    <style>
+        body { 
+            font-family: sans-serif; 
+            background: #1a1a1a; 
+            color: #fff; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            margin: 0; 
+            text-align: center; 
+            position: relative;
+            padding: 40px 20px; 
+            box-sizing: border-box;
+        }
+
+        body:not(.lang-en-active) .lang-en { display: none; }
+        body.lang-en-active .lang-cs { display: none; }
+
+        h1 { font-size: 3rem; margin-bottom: 10px; }
+        p { color: #aaa; margin-bottom: 30px; }
+
+        .lang-switcher { position: fixed; top: 20px; right: 20px; z-index: 100; }
+        .lang-btn { background: #333; color: #fff; border: 1px solid #555; padding: 8px 12px; cursor: pointer; border-radius: 5px; transition: 0.2s; }
+        .lang-btn:hover { background: #444; }
+
+        .hamburger-btn { position: fixed; top: 15px; left: 20px; background: none; border: none; color: #fff; font-size: 2rem; cursor: pointer; z-index: 100; }
+        .mobile-menu { position: fixed; top: 0; left: -100%; width: 250px; height: 100vh; background: #111; box-shadow: 5px 0 15px rgba(0,0,0,0.5); display: flex; flex-direction: column; padding: 80px 20px; box-sizing: border-box; transition: 0.3s ease; z-index: 99; }
+        .mobile-menu.open { left: 0; }
+        .menu-link { color: #888; font-size: 1.2rem; text-decoration: none; margin-bottom: 20px; transition: 0.2s; }
+        .menu-link:hover, .menu-link.active { color: #fff; }
+
+        #game-selection {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .game-card {
+            background: #2a2a2a;
+            border: 2px solid #444;
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+            border-color: #0000FF;
+        }
+
+        .game-card h2 { margin: 0 0 10px 0; color: #0000FF; }
+        .game-card p { margin: 0; font-size: 0.9rem; color: #ccc; }
+
+        #game-container {
+            display: none; 
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        canvas {
+            background: #222;
+            border: 2px solid #555;
+            border-radius: 8px;
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            touch-action: none; 
+        }
+
+        .back-btn {
+            margin-bottom: 20px;
+            background: transparent;
+            color: #0000FF;
+            border: 1px solid #0000FF;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: 0.2s;
+        }
+
+        .back-btn:hover { background: #0000FF; color: #1a1a1a; }
+        
+        #score-display, #level-display {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-top: 10px;
+            color: #fff;
+        }
+        #level-display { color: #0000FF; display: none; }
+    </style>
+</head>
+<body> 
+    <button class="hamburger-btn" aria-label="Menu" onclick="toggleMenu()">☰</button>
+    <nav class="mobile-menu" id="mobileMenu">
+        <a href="index.html" class="menu-link">Domů / Home</a>
+        <a href="games.html" class="menu-link active">Hry / Games</a>
+        <a href="test1.html" class="menu-link">TEST</a>
+    </nav>
+    <div class="lang-switcher">
+        <button class="lang-btn" id="langToggle" onclick="toggleLanguage()">EN</button>
+    </div>
+
+    <div id="game-selection">
+        <h1>
+            <span class="lang-cs">Vyberte si hru</span>
+            <span class="lang-en">Choose a game</span>
+        </h1>
+        
+        <div class="game-card" onclick="initDinoGame()">
+            <h2>
+                <span class="lang-cs">Dinosaurus</span>
+                <span class="lang-en">Dino Runner</span>
+            </h2>
+            <p>
+                <span class="lang-cs">Skákej přes překážky. Klikni / Mezerník.</span>
+                <span class="lang-en">Jump over obstacles. Click / Space.</span>
+            </p>
+        </div>
+
+        <div class="game-card" onclick="initBreakoutGame()">
+            <h2>Breakout</h2>
+            <p>
+                <span class="lang-cs">Rozbíjej bloky. Hýbej myší / prstem.</span>
+                <span class="lang-en">Break the bricks. Move mouse / touch.</span>
+            </p>
+        </div>
+    </div>
+
+    <div id="game-container">
+        <button class="back-btn" onclick="showMenu()">
+            <span class="lang-cs">← Zpět do menu</span>
+            <span class="lang-en">← Back to menu</span>
+        </button>
+        <canvas id="gameCanvas"></canvas>
+        <div id="level-display">Level: 1</div>
+        <div id="score-display">Score: 0</div>
+    </div>
+
+    <script>
+        function toggleLanguage() {
+            const body = document.body;
+            const btn = document.getElementById('langToggle');
+            body.classList.toggle('lang-en-active');
+            btn.innerText = body.classList.contains('lang-en-active') ? 'CZ' : 'EN';
+        }
+
+        function toggleMenu() {
+            document.getElementById('mobileMenu').classList.toggle('open');
+        }
+
+        document.addEventListener('click', function(e) {
+            const menu = document.getElementById('mobileMenu');
+            const btn = document.querySelector('.hamburger-btn');
+            if (menu.classList.contains('open') && !menu.contains(e.target) && !btn.contains(e.target)) {
+                menu.classList.remove('open'); 
+            }
+        });
+
+        const selectionScreen = document.getElementById('game-selection');
+        const gameContainer = document.getElementById('game-container');
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreDisplay = document.getElementById('score-display');
+        const levelDisplay = document.getElementById('level-display');
+        
+        let gameLoopId;
+        let activeGame = null;
+        let score = 0;
+        let isGameOver = false;
+
+        let isJumpHeld = false;
+
+        function showMenu() {
+            cancelAnimationFrame(gameLoopId); 
+            gameContainer.style.display = 'none';
+            selectionScreen.style.display = 'flex';
+            activeGame = null;
+            levelDisplay.style.display = 'none';
+        }
+
+        /* HRA 1: DINO RUNNER */
+        let dino, obstacles, baseGameSpeed, frames;
+
+        function handleJumpInputDown(e) {
+            if (e.type === 'keydown' && e.code !== 'Space') return;
+            if (e.type === 'touchstart') e.preventDefault();
+            
+            isJumpHeld = true;
+
+            if (activeGame === 'dino' && isGameOver) {
+                resetDino();
+            }
+        }
+
+        function handleJumpInputUp(e) {
+            if (e.type === 'keyup' && e.code !== 'Space') return;
+            isJumpHeld = false;
+        }
+
+        window.addEventListener('keydown', handleJumpInputDown);
+        window.addEventListener('keyup', handleJumpInputUp);
+        canvas.addEventListener('mousedown', handleJumpInputDown);
+        canvas.addEventListener('mouseup', handleJumpInputUp);
+        canvas.addEventListener('touchstart', handleJumpInputDown, {passive: false});
+        canvas.addEventListener('touchend', handleJumpInputUp);
+
+        function initDinoGame() {
+            selectionScreen.style.display = 'none';
+            gameContainer.style.display = 'flex';
+            levelDisplay.style.display = 'none';
+            canvas.width = 600;
+            canvas.height = 200;
+            activeGame = 'dino';
+            isJumpHeld = false; 
+            
+            resetDino();
+            dinoLoop();
+        }
+
+        function resetDino() {
+            dino = { x: 50, y: 150, w: 20, h: 40, dy: 0, gravity: 0.6, jumpPower: -10.5, isGrounded: true };
+            obstacles = [];
+            score = 0;
+            frames = 0;
+            baseGameSpeed = 5;
+            isGameOver = false;
+            spawnObstacle();
+        }
+
+        function spawnObstacle() {
+            let type = Math.random();
+            let obs = { x: canvas.width, w: 20, h: 30, y: 160, type: 'ground' };
+
+            if (type > 0.8) {
+                // Letící překážka
+                obs.w = 25; obs.h = 15; obs.y = 120; obs.type = 'air';
+            } else if (type > 0.4) {
+                // Široký kaktus
+                obs.w = 40; obs.h = 20; obs.y = 170; obs.type = 'ground';
+            } else {
+                // Klasický kaktus
+                obs.w = 15; obs.h = 45; obs.y = 145; obs.type = 'ground';
+            }
+            obstacles.push(obs);
+        }
+
+        function dinoLoop() {
+            if (activeGame !== 'dino') return;
+
+            if (!isGameOver) {
+                if (isJumpHeld && dino.isGrounded) {
+                    dino.dy = dino.jumpPower;
+                    dino.isGrounded = false;
+                }
+
+                dino.dy += dino.gravity;
+                dino.y += dino.dy;
+                
+                if (dino.y + dino.h >= 190) { 
+                    dino.y = 190 - dino.h;
+                    dino.dy = 0;
+                    dino.isGrounded = true;
+                }
+
+                let currentSpeed = baseGameSpeed + (score * 0.01);
+
+                for (let i = 0; i < obstacles.length; i++) {
+                    let obs = obstacles[i];
+                    obs.x -= currentSpeed;
+
+                    if (dino.x < obs.x + obs.w && dino.x + dino.w > obs.x &&
+                        dino.y < obs.y + obs.h && dino.y + dino.h > obs.y) {
+                        isGameOver = true;
+                    }
+                }
+
+                if (obstacles.length > 0 && obstacles[0].x + obstacles[0].w < 0) {
+                    obstacles.shift();
+                    score += 10;
+                }
+
+                frames++;
+                
+                let minGap = 200 + (currentSpeed * 10); 
+                let lastObs = obstacles[obstacles.length - 1];
+                
+                if (!lastObs || (canvas.width - lastObs.x > minGap && Math.random() < 0.02)) {
+                    spawnObstacle();
+                }
+
+                scoreDisplay.innerText = `Score: ${Math.floor(score)}`;
+            }
+
+            ctx.fillStyle = '#222';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+          
+            ctx.fillStyle = '#555';
+            ctx.fillRect(0, 190, canvas.width, 10);
+
+            ctx.fillStyle = isGameOver ? '#FF0000' : '#0000FF';
+            ctx.fillRect(dino.x, dino.y, dino.w, dino.h);
+
+            for (let obs of obstacles) {
+                ctx.fillStyle = obs.type === 'air' ? '#FFFF00' : '#00FF00';
+                ctx.fillRect(obs.x, obs.y, obs.w, obs.h);
+            }
+
+            if (isGameOver) {
+                ctx.fillStyle = 'white';
+                ctx.font = '20px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText('Game Over! Tap/Space to restart', canvas.width/2, 100);
+                ctx.textAlign = 'left';
+            }
+
+            gameLoopId = requestAnimationFrame(dinoLoop);
+        }
+
+        /* HRA 2: BREAKOUT (Rozbíjení bloků) */
+        let ball, paddle, bricks;
+        let brickRowCount, brickColumnCount, brickWidth, brickHeight, brickPadding, brickOffsetTop, brickOffsetLeft;
+        let currentLevel = 1;
+        let isLevelComplete = false;
+
+        function initBreakoutGame() {
+            selectionScreen.style.display = 'none';
+            gameContainer.style.display = 'flex';
+            levelDisplay.style.display = 'block';
+            canvas.width = 480;
+            canvas.height = 400; 
+            activeGame = 'breakout';
+            
+            brickColumnCount = 5;
+            brickPadding = 10;
+            brickOffsetTop = 30;
+            brickOffsetLeft = 30;
+            brickWidth = (canvas.width - (brickOffsetLeft * 2) - (brickPadding * (brickColumnCount - 1))) / brickColumnCount;
+            brickHeight = 20;
+
+            startLevel(1, true);
+
+            canvas.addEventListener('mousemove', breakoutMouseMove);
+            canvas.addEventListener('touchmove', breakoutTouchMove, {passive: false});
+
+            breakoutLoop();
+        }
+
+        function startLevel(level, resetScore = false) {
+            currentLevel = level;
+            isLevelComplete = false;
+            isGameOver = false;
+            
+            if (resetScore) score = 0;
+            
+            levelDisplay.innerText = `Level: ${currentLevel}`;
+            
+            let speedMultiplier = 1 + (currentLevel * 0.2); 
+            let dirX = Math.random() > 0.5 ? 1 : -1;
+            
+            ball = { 
+                x: canvas.width / 2, 
+                y: canvas.height - 30, 
+                dx: 4.5 * speedMultiplier * dirX, 
+                dy: -4.5 * speedMultiplier, 
+                radius: 8 
+            };
+            paddle = { w: 75, h: 10, x: (canvas.width - 75) / 2 };
+
+            brickRowCount = Math.min(2 + currentLevel, 6);
+            
+            bricks = [];
+            for (let c = 0; c < brickColumnCount; c++) {
+                bricks[c] = [];
+                for (let r = 0; r < brickRowCount; r++) {
+                    bricks[c][r] = { x: 0, y: 0, status: 1 }; 
+                }
+            }
+        }
+
+        function breakoutMouseMove(e) {
+            if (activeGame !== 'breakout' || isGameOver || isLevelComplete) return;
+            let relativeX = e.clientX - canvas.getBoundingClientRect().left;
+            if (relativeX > 0 && relativeX < canvas.width) {
+                paddle.x = relativeX - paddle.w / 2;
+                if(paddle.x < 0) paddle.x = 0;
+                if(paddle.x + paddle.w > canvas.width) paddle.x = canvas.width - paddle.w;
+            }
+        }
+
+        function breakoutTouchMove(e) {
+            if (activeGame !== 'breakout' || isGameOver || isLevelComplete) return;
+            e.preventDefault(); 
+            let relativeX = e.touches[0].clientX - canvas.getBoundingClientRect().left;
+            if (relativeX > 0 && relativeX < canvas.width) {
+                paddle.x = relativeX - paddle.w / 2;
+                if(paddle.x < 0) paddle.x = 0;
+                if(paddle.x + paddle.w > canvas.width) paddle.x = canvas.width - paddle.w;
+            }
+        }
+
+        function collisionDetection() {
+            let activeBricks = 0;
+            for (let c = 0; c < brickColumnCount; c++) {
+                for (let r = 0; r < brickRowCount; r++) {
+                    let b = bricks[c][r];
+                    if (b.status === 1) {
+                        activeBricks++;
+                        if (ball.x > b.x && ball.x < b.x + brickWidth && ball.y > b.y && ball.y < b.y + brickHeight) {
+                            ball.dy = -ball.dy;
+                            b.status = 0;
+                            score += 10;
+                        }
+                    }
+                }
+            }
+            
+            if (activeBricks === 0 && !isLevelComplete) {
+                isLevelComplete = true;
+            }
+        }
+
+        function breakoutLoop() {
+            if (activeGame !== 'breakout') return;
+
+            if (!isGameOver && !isLevelComplete) {
+                ball.x += ball.dx;
+                ball.y += ball.dy;
+
+                if (ball.x + ball.dx > canvas.width - ball.radius || ball.x + ball.dx < ball.radius) {
+                    ball.dx = -ball.dx;
+                }
+                if (ball.y + ball.dy < ball.radius) {
+                    ball.dy = -ball.dy;
+                } else if (ball.y + ball.dy > canvas.height - ball.radius) {
+                    if (ball.x > paddle.x && ball.x < paddle.x + paddle.w) {
+                        ball.dy = -ball.dy;
+                        let hitPoint = ball.x - (paddle.x + paddle.w/2);
+                        ball.dx = hitPoint * 0.15; 
+                    } else {
+                        isGameOver = true;
+                    }
+                }
+
+                collisionDetection();
+                scoreDisplay.innerText = `Score: ${score}`;
+            }
+          
+            ctx.fillStyle = '#222';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            for (let c = 0; c < brickColumnCount; c++) {
+                for (let r = 0; r < brickRowCount; r++) {
+                    if (bricks[c][r].status === 1) {
+                        let brickX = (c * (brickWidth + brickPadding)) + brickOffsetLeft;
+                        let brickY = (r * (brickHeight + brickPadding)) + brickOffsetTop;
+                        bricks[c][r].x = brickX;
+                        bricks[c][r].y = brickY;
+                        
+                        ctx.fillStyle = '#0000FF';
+                        ctx.fillRect(brickX, brickY, brickWidth, brickHeight);
+                    }
+                }
+            }
+
+            ctx.fillStyle = '#00FF00';
+            ctx.fillRect(paddle.x, canvas.height - paddle.h, paddle.w, paddle.h);
+
+            ctx.beginPath();
+            ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+            ctx.fillStyle = '#fff';
+            ctx.fill();
+            ctx.closePath();
+
+            if (isGameOver || isLevelComplete) {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                ctx.fillStyle = 'white';
+                ctx.textAlign = 'center';
+                
+                if (isGameOver) {
+                    ctx.font = '20px sans-serif';
+                    ctx.fillText('Game Over! Click/Tap to restart', canvas.width / 2, canvas.height / 2);
+                    
+                    canvas.onclick = () => {
+                        if (activeGame === 'breakout') {
+                            startLevel(1, true);
+                            canvas.onclick = null;
+                        }
+                    };
+                } else if (isLevelComplete) {
+                    ctx.font = '20px sans-serif';
+                    ctx.fillStyle = '#00FF00';
+                    ctx.fillText('LEVEL CLEARED!', canvas.width / 2, canvas.height / 2 - 15);
+                    ctx.fillStyle = 'white';
+                    ctx.fillText('Click/Tap for Next Level', canvas.width / 2, canvas.height / 2 + 15);
+                    
+                    canvas.onclick = () => {
+                        if (activeGame === 'breakout') {
+                            startLevel(currentLevel + 1, false);
+                            canvas.onclick = null;
+                        }
+                    };
+                }
+                ctx.textAlign = 'left';
+            }
+
+            gameLoopId = requestAnimationFrame(breakoutLoop);
+        }
+    </script>
+</body>
+</html>
