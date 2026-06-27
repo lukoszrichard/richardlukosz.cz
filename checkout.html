@@ -238,7 +238,7 @@
 
         function sendEmail() {
             const finalBodyText = document.getElementById('emailBody').value;
-            const subject = encodeURIComponent(lang === 'en' ? "New Order - OS Marketplace" : "Nová poptávka - OS Marketplace");
+            const subject = encodeURIComponent(lang === 'en' ? "New Order" : "Nová poptávka");
             const body = encodeURIComponent(finalBodyText);
 
             window.location.href = `mailto:${MY_EMAIL}?subject=${subject}&body=${body}`;
