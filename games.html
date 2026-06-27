@@ -166,7 +166,6 @@
         <a href="os.html" class="menu-link">Operační systémy / OS</a>
         <a href="test1.html" class="menu-link">TEST</a>
     </nav>
-    
     <div class="lang-switcher">
         <button class="lang-btn" id="langToggle" onclick="toggleLanguage()">EN</button>
     </div>
@@ -181,10 +180,10 @@
             <span class="lang-en">In development...</span>
         </p>
         
-        <div class="game-card" onclick="initDinoGame()">
+        <div class="game-card" onclick="initrectangleGame()">
             <h2>
-                <span class="lang-cs">Dinosaurus</span>
-                <span class="lang-en">Dino Runner</span>
+                <span class="lang-cs">Obdélníkový běžec</span>
+                <span class="lang-en">Rectangle Runner</span>
             </h2>
             <p>
                 <span class="lang-cs">Skákej přes překážky. Klikni / Mezerník.</span>
@@ -192,8 +191,11 @@
             </p>
         </div>
 
-        <div class="game-card" onclick="initBreakoutGame()">
-            <h2>Breakout</h2>
+        <div class="game-card" onclick="initblockdestroyerGame()">
+            <h2>
+                <span class="lang-cs">Rozbíjení bloků</span>
+                <span class="lang-en">Breaking Blocks</span>
+            </h2>
             <p>
                 <span class="lang-cs">Rozbíjej bloky. Hýbej myší / prstem.</span>
                 <span class="lang-en">Break the bricks. Move mouse / touch.</span>
@@ -253,8 +255,8 @@
             levelDisplay.style.display = 'none';
         }
 
-        /* HRA 1: DINO RUNNER */
-        let dino, obstacles, baseGameSpeed, frames;
+        /* HRA 1: Rectangle RUNNER */
+        let rectangle, obstacles, baseGameSpeed, frames;
 
         function handleJumpInputDown(e) {
             if (e.type === 'keydown' && e.code !== 'Space') return;
@@ -262,8 +264,8 @@
             
             isJumpHeld = true;
 
-            if (activeGame === 'dino' && isGameOver) {
-                resetDino();
+            if (activeGame === 'rectangle' && isGameOver) {
+                resetrectangle();
             }
         }
 
@@ -279,21 +281,21 @@
         canvas.addEventListener('touchstart', handleJumpInputDown, {passive: false});
         canvas.addEventListener('touchend', handleJumpInputUp);
 
-        function initDinoGame() {
+        function initrectangleGame() {
             selectionScreen.style.display = 'none';
             gameContainer.style.display = 'flex';
             levelDisplay.style.display = 'none';
             canvas.width = 600;
             canvas.height = 200;
-            activeGame = 'dino';
+            activeGame = 'rectangle';
             isJumpHeld = false; 
             
-            resetDino();
-            dinoLoop();
+            resetrectangle();
+            rectangleLoop();
         }
 
-        function resetDino() {
-            dino = { x: 50, y: 150, w: 20, h: 40, dy: 0, gravity: 0.6, jumpPower: -10.5, isGrounded: true };
+        function resetrectangle() {
+            rectangle = { x: 50, y: 150, w: 20, h: 40, dy: 0, gravity: 0.6, jumpPower: -10.5, isGrounded: true };
             obstacles = [];
             score = 0;
             frames = 0;
@@ -319,22 +321,22 @@
             obstacles.push(obs);
         }
 
-        function dinoLoop() {
-            if (activeGame !== 'dino') return;
+        function rectangleLoop() {
+            if (activeGame !== 'rectangle') return;
 
             if (!isGameOver) {
-                if (isJumpHeld && dino.isGrounded) {
-                    dino.dy = dino.jumpPower;
-                    dino.isGrounded = false;
+                if (isJumpHeld && rectangle.isGrounded) {
+                    rectangle.dy = rectangle.jumpPower;
+                    rectangle.isGrounded = false;
                 }
 
-                dino.dy += dino.gravity;
-                dino.y += dino.dy;
+                rectangle.dy += rectangle.gravity;
+                rectangle.y += rectangle.dy;
                 
-                if (dino.y + dino.h >= 190) { 
-                    dino.y = 190 - dino.h;
-                    dino.dy = 0;
-                    dino.isGrounded = true;
+                if (rectangle.y + rectangle.h >= 190) { 
+                    rectangle.y = 190 - rectangle.h;
+                    rectangle.dy = 0;
+                    rectangle.isGrounded = true;
                 }
 
                 let currentSpeed = baseGameSpeed + (score * 0.01);
@@ -343,8 +345,8 @@
                     let obs = obstacles[i];
                     obs.x -= currentSpeed;
 
-                    if (dino.x < obs.x + obs.w && dino.x + dino.w > obs.x &&
-                        dino.y < obs.y + obs.h && dino.y + dino.h > obs.y) {
+                    if (rectangle.x < obs.x + obs.w && rectangle.x + rectangle.w > obs.x &&
+                        rectangle.y < obs.y + obs.h && rectangle.y + rectangle.h > obs.y) {
                         isGameOver = true;
                     }
                 }
@@ -373,7 +375,7 @@
             ctx.fillRect(0, 190, canvas.width, 10);
 
             ctx.fillStyle = isGameOver ? '#FF0000' : '#8ab4f8';
-            ctx.fillRect(dino.x, dino.y, dino.w, dino.h);
+            ctx.fillRect(rectangle.x, rectangle.y, rectangle.w, rectangle.h);
 
             for (let obs of obstacles) {
                 ctx.fillStyle = obs.type === 'air' ? '#FFFF00' : '#00FF00';
@@ -388,22 +390,22 @@
                 ctx.textAlign = 'left';
             }
 
-            gameLoopId = requestAnimationFrame(dinoLoop);
+            gameLoopId = requestAnimationFrame(rectangleLoop);
         }
 
-        /* HRA 2: BREAKOUT (Rozbíjení bloků) */
+        /* HRA 2: Blockdestroyer (Rozbíjení bloků) */
         let ball, paddle, bricks;
         let brickRowCount, brickColumnCount, brickWidth, brickHeight, brickPadding, brickOffsetTop, brickOffsetLeft;
         let currentLevel = 1;
         let isLevelComplete = false;
 
-        function initBreakoutGame() {
+        function initblockdestroyerGame() {
             selectionScreen.style.display = 'none';
             gameContainer.style.display = 'flex';
             levelDisplay.style.display = 'block';
             canvas.width = 480;
             canvas.height = 400; 
-            activeGame = 'breakout';
+            activeGame = 'blockdestroyer';
             
             brickColumnCount = 5;
             brickPadding = 10;
@@ -414,10 +416,10 @@
 
             startLevel(1, true);
 
-            canvas.addEventListener('mousemove', breakoutMouseMove);
-            canvas.addEventListener('touchmove', breakoutTouchMove, {passive: false});
+            canvas.addEventListener('mousemove', blockdestroyerMouseMove);
+            canvas.addEventListener('touchmove', blockdestroyerTouchMove, {passive: false});
 
-            breakoutLoop();
+            blockdestroyerLoop();
         }
 
         function startLevel(level, resetScore = false) {
@@ -452,8 +454,8 @@
             }
         }
 
-        function breakoutMouseMove(e) {
-            if (activeGame !== 'breakout' || isGameOver || isLevelComplete) return;
+        function blockdestroyerMouseMove(e) {
+            if (activeGame !== 'blockdestroyer' || isGameOver || isLevelComplete) return;
             let relativeX = e.clientX - canvas.getBoundingClientRect().left;
             if (relativeX > 0 && relativeX < canvas.width) {
                 paddle.x = relativeX - paddle.w / 2;
@@ -462,8 +464,8 @@
             }
         }
 
-        function breakoutTouchMove(e) {
-            if (activeGame !== 'breakout' || isGameOver || isLevelComplete) return;
+        function blockdestroyerTouchMove(e) {
+            if (activeGame !== 'blockdestroyer' || isGameOver || isLevelComplete) return;
             e.preventDefault(); 
             let relativeX = e.touches[0].clientX - canvas.getBoundingClientRect().left;
             if (relativeX > 0 && relativeX < canvas.width) {
@@ -494,8 +496,8 @@
             }
         }
 
-        function breakoutLoop() {
-            if (activeGame !== 'breakout') return;
+        function blockdestroyerLoop() {
+            if (activeGame !== 'blockdestroyer') return;
 
             if (!isGameOver && !isLevelComplete) {
                 ball.x += ball.dx;
@@ -558,7 +560,7 @@
                     ctx.fillText('Game Over! Click/Tap to restart', canvas.width / 2, canvas.height / 2);
                     
                     canvas.onclick = () => {
-                        if (activeGame === 'breakout') {
+                        if (activeGame === 'blockdestroyer') {
                             startLevel(1, true);
                             canvas.onclick = null;
                         }
@@ -571,7 +573,7 @@
                     ctx.fillText('Click/Tap for Next Level', canvas.width / 2, canvas.height / 2 + 15);
                     
                     canvas.onclick = () => {
-                        if (activeGame === 'breakout') {
+                        if (activeGame === 'blockdestroyer') {
                             startLevel(currentLevel + 1, false);
                             canvas.onclick = null;
                         }
@@ -580,7 +582,7 @@
                 ctx.textAlign = 'left';
             }
 
-            gameLoopId = requestAnimationFrame(breakoutLoop);
+            gameLoopId = requestAnimationFrame(blockdestroyerLoop);
         }
     </script>
 </body>
