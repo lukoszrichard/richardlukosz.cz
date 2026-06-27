@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dokončení objednávky | OS Marketplace</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background: #1a1a1a;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .checkout-container {
+            background: #252525;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            margin-top: 0;
+            color: #8ab4f8;
+        }
+
+        .warning {
+            background: #000000;
+            padding: 15px;
+            border-radius: 8px;
+            border: 5px solid #ff0000;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #ffffff;
+            text-align: center;
+        }
+
+        .target-email {
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+            color: #ccc;
+        }
+
+        .target-email span {
+            color: #8ab4f8;
+            font-weight: bold;
+            user-select: all;
+        }
+
+        textarea {
+            width: 100%;
+            height: 280px;
+            background: #111;
+            color: #fff;
+            border: 1px solid #444;
+            border-radius: 8px;
+            padding: 15px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            box-sizing: border-box;
+            resize: vertical;
+            margin-bottom: 20px;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #8ab4f8;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+        }
+
+        @media (max-width: 480px) {
+            .button-group {
+                flex-direction: column;
+            }
+        }
+
+        .btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.05rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .btn-copy {
+            background: #333;
+            color: #fff;
+            border: 1px solid #555;
+        }
+
+        .btn-copy:hover {
+            background: #444;
+        }
+
+        .btn-send {
+            background: #8ab4f8;
+            color: #1a1a1a;
+        }
+
+        .btn-send:hover {
+            background: #6a96e0;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 25px;
+            color: #888;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="checkout-container">
+        <h1 id="titleText">Shrnutí poptávky</h1>
+        
+        <div class="warning" id="warningText">
+            !!! NEJEDNÁ SE O SKUTEČNÝ ESHOP !!!<br>
+            JDE O TESTOVACÍ PROJEKT<br>
+            E-mailová adresa je dočasná (temp-mail.org).
+        </div>
+
+        <div class="target-email" id="targetEmailText">
+        </div>
+
+        <textarea id="emailBody"></textarea>
+
+        <div class="button-group">
+            <button class="btn btn-copy" onclick="copyEmailText()" id="btnCopyText">Zkopírovat text</button>
+            <button class="btn btn-send" onclick="sendEmail()" id="btnSendText">Otevřít e-mail aplikaci</button>
+        </div>
+        
+        <a href="os.html" class="back-link" id="backText">← Zpět do obchodu</a>
+    </div>
+
+    <script>
+        const MY_EMAIL = atob("aGFib2g4NDI5NkBkaXZhaGQuY29t");
+
+        const cartData = localStorage.getItem('osMarketplaceCart');
+        const lang = localStorage.getItem('osMarketplaceLang') || 'cs';
+        
+        let cart = [];
+        if (cartData) {
+            cart = JSON.parse(cartData);
+        } else {
+            alert(lang === 'en' ? "Your cart is empty." : "Váš košík je prázdný.");
+            window.location.href = 'os.html';
+        }
+
+        if (lang === 'en') {
+            document.getElementById('titleText').innerText = "Order Summary";
+            document.getElementById('warningText').innerHTML = "!!! THIS IS NOT A REAL E-SHOP !!!<br>THIS IS A TEST PROJECT<br>The email address is temporary (temp-mail.org).";
+            document.getElementById('targetEmailText').innerHTML = `Send to email: <span>${MY_EMAIL}</span>`;
+            document.getElementById('btnCopyText').innerText = "Copy Text";
+            document.getElementById('btnSendText').innerText = "Open Email App";
+            document.getElementById('backText').innerText = "← Back to store";
+        } else {
+            document.getElementById('targetEmailText').innerHTML = `Zašlete na e-mail: <span>${MY_EMAIL}</span>`;
+        }
+
+        let orderText = lang === 'en' 
+            ? "Subject: New Order\n\nHello,\n\nI would like to order the following services:\n\n"
+            : "Předmět: Nová poptávka\n\nDobrý den,\n\nchtěl bych si objednat tyto služby:\n\n";
+
+        let originalSum = 0;
+        cart.forEach((item, index) => {
+            originalSum += item.price;
+            const itemName = lang === 'en' ? item.nameEn : item.nameCs;
+            orderText += `${index + 1}. ${itemName} (${item.price} Kč)\n`;
+        });
+
+        let finalSum = originalSum;
+        if (cart.length > 1) {
+            finalSum = originalSum * 0.8;
+        }
+
+        orderText += `\n-----------------------\n`;
+        orderText += lang === 'en' 
+            ? `Total price (after discount): ${finalSum} Kč\n\n`
+            : `Celková cena (po případné slevě): ${finalSum} Kč\n\n`;
+        
+        orderText += lang === 'en'
+            ? `[PLEASE ENTER YOUR QUESTIONS AND SIGN HERE]`
+            : `[ZDE DOPLŇTE PŘÍPADNÉ DOTAZY A PODPIS]`;
+
+        document.getElementById('emailBody').value = orderText;
+
+        function copyEmailText() {
+            const textToCopy = document.getElementById('emailBody').value;
+            
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                const copyBtn = document.getElementById('btnCopyText');
+                const originalBtnText = copyBtn.innerText;
+                
+                copyBtn.innerText = lang === 'en' ? "✔ Copied!" : "✔ Zkopírováno!";
+                copyBtn.style.background = "#4caf50";
+                copyBtn.style.color = "#fff";
+                copyBtn.style.borderColor = "#4caf50";
+                
+                setTimeout(() => {
+                    copyBtn.innerText = originalBtnText;
+                    copyBtn.style.background = "";
+                    copyBtn.style.color = "";
+                    copyBtn.style.borderColor = "";
+                }, 2000);
+            }).catch(err => {
+                alert(lang === 'en' ? "Failed to copy text." : "Nepodařilo se zkopírovat text.");
+            });
+        }
+
+        function sendEmail() {
+            const finalBodyText = document.getElementById('emailBody').value;
+            const subject = encodeURIComponent(lang === 'en' ? "New Order - OS Marketplace" : "Nová poptávka - OS Marketplace");
+            const body = encodeURIComponent(finalBodyText);
+
+            window.location.href = `mailto:${MY_EMAIL}?subject=${subject}&body=${body}`;
+        }
+    </script>
+</body>
+</html>

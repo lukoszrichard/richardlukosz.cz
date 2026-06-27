@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OS Marketplace</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background: #1a1a1a;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            text-align: center;
+            position: relative;
+            padding: 80px 20px 40px 20px;
+            box-sizing: border-box;
+            overflow-x: hidden;
+        }
+
+        body:not(.lang-en-active) .lang-en { display: none; }
+        body.lang-en-active .lang-cs { display: none; }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+            color: #fff;
+        }
+
+        .marketplace-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .product-card {
+            background: #252525;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-align: left;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        }
+
+        .product-title {
+            font-size: 1.4rem;
+            margin: 0 0 10px 0;
+            color: #8ab4f8;
+        }
+
+        .product-desc {
+            font-size: 0.95rem;
+            color: #bbb;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        .product-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #444;
+            padding-top: 15px;
+        }
+
+        .product-price {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .btn-order {
+            background: #8ab4f8;
+            color: #1a1a1a;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-order:hover {
+            background: #6a96e0;
+        }
+
+        .top-right-controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            display: flex;
+            gap: 10px;
+        }
+
+        .control-btn {
+            background: #333;
+            color: #fff;
+            border: 1px solid #555;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .control-btn:hover {
+            background: #444;
+        }
+
+        .cart-badge {
+            background: #e8eaed;
+            color: #1a1a1a;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .cart-sidebar {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 320px;
+            height: 100vh;
+            background: #111;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            box-sizing: border-box;
+            transition: 0.3s ease;
+            z-index: 101;
+            text-align: left;
+        }
+
+        .cart-sidebar.open {
+            right: 0;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #333;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+
+        .cart-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .close-cart-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .cart-items {
+            flex-grow: 1;
+            overflow-y: auto;
+            margin-bottom: 15px;
+        }
+
+        .cart-item {
+            background: #252525;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cart-item-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .cart-item-price {
+            color: #8ab4f8;
+            font-weight: bold;
+        }
+
+        .remove-item-btn {
+            background: none;
+            border: none;
+            color: #ff6b6b;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .cart-note {
+            background: #333;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: #ddd;
+            margin-bottom: 15px;
+            border-left: 5px solid #FF8000;
+        }
+
+        .cart-totals {
+            border-top: 1px solid #333;
+            padding-top: 15px;
+        }
+
+        .totals-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+            color: #aaa;
+        }
+
+        .totals-row.final {
+            font-size: 1.3rem;
+            color: #fff;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            background: #8ab4f8;
+            color: #1a1a1a;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        .checkout-btn:hover {
+            background: #6a96e0;
+        }
+
+        .hamburger-btn {
+            position: fixed;
+            top: 15px;
+            left: 20px;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 2rem;
+            cursor: pointer;
+            z-index: 100;
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            left: -100%;
+            width: 250px;
+            height: 100vh;
+            background: #111;
+            box-shadow: 5px 0 15px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            padding: 80px 20px;
+            box-sizing: border-box;
+            transition: 0.3s ease;
+            z-index: 99;
+        }
+
+        .mobile-menu.open {
+            left: 0;
+        }
+
+        .menu-link {
+            color: #888;
+            font-size: 1.2rem;
+            text-decoration: none;
+            margin-bottom: 20px;
+            transition: 0.2s;
+        }
+
+        .menu-link:hover, .menu-link.active {
+            color: #fff;
+        }
+
+        .warning {
+            background: #000000;
+            padding: 15px;
+            border-radius: 8px;
+            border: 5px solid #ff0000; 
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #ffffff;
+        }
+    </style>
+</head>
+
+<body>
+
+    <button class="hamburger-btn" aria-label="Menu" onclick="toggleMenu()">☰</button>
+    <nav class="mobile-menu" id="mobileMenu">
+        <a href="index.html" class="menu-link">Domů / Home</a>
+        <a href="games.html" class="menu-link">Hry / Games</a>
+        <a href="os.html" class="menu-link active">Operační systémy / OS</a>
+        <a href="test1.html" class="menu-link">TEST</a>
+    </nav>
+
+    <div class="top-right-controls">
+        <button class="control-btn" onclick="toggleCart()">
+            🛒
+            <span class="lang-cs">Košík</span>
+            <span class="lang-en">Cart</span>
+            <span class="cart-badge" id="cartBadge">0</span>
+        </button>
+        <button class="control-btn" id="langToggle" onclick="toggleLanguage()">EN</button>
+    </div>
+
+    <div class="cart-sidebar" id="cartSidebar">
+
+        <div class="cart-header">
+            <h2>
+                <span class="lang-cs">Váš košík</span>
+                <span class="lang-en">Your Cart</span>
+            </h2>
+            <button class="close-cart-btn" onclick="toggleCart()">✖</button>
+        </div>
+
+        <div class="cart-items" id="cartItemsContainer"></div>
+        <div class="cart-note">
+            <span class="lang-cs"><b>Jedna služba se vztahuje k jednomu zařízení.</b><br>Při objednávce více služeb najednou získáte slevu <b>20 %</b>!</span>
+            <span class="lang-en"><b>One service applies to one device.</b><br>Order multiple services at once and get a <b>20%</b> discount!</span>
+        </div>
+
+        <div class="cart-totals">
+            <div class="totals-row">
+                <span>
+                    <span class="lang-cs">Původní cena:</span>
+                    <span class="lang-en">Original Price:</span>
+                </span>
+                <span><span id="originalPriceOut">0</span> Kč</span>
+            </div>
+
+            <div class="totals-row">
+                <span>
+                    <span class="lang-cs">Sleva:</span>
+                    <span class="lang-en">Discount:</span>
+                </span>
+                <span><span id="discountOut">0</span> Kč</span>
+            </div>
+
+            <div class="totals-row final">
+                <span>Celkem / Total:</span>
+                <span><span id="finalPriceOut">0</span> Kč</span>
+            </div>
+        </div>
+
+        <button class="checkout-btn" onclick="goToCheckout()">
+            <span class="lang-cs">Odeslat poptávku</span>
+            <span class="lang-en">Submit Request</span>
+        </button>
+    </div>
+
+    <div class="warning" id="warningText">
+        <span class="lang-cs">
+            !!! NEJEDNÁ SE O SKUTEČNÝ ESHOP !!!<br>
+            JDE O TESTOVACÍ PROJEKT
+        </span>
+        <span class="lang-en">
+            !!! THIS IS NOT A REAL E-SHOP !!!<br>
+            THIS IS A TEST PROJECT
+        </span>
+    </div>
+
+    <h1>
+        <span class="lang-cs">Služby: Operační systémy</span>
+        <span class="lang-en">OS Services</span>
+    </h1>
+
+    <div class="marketplace-grid">
+
+        <div class="product-card">
+            <h3 class="product-title">
+                <span class="lang-cs">Instalace Linuxu</span>
+                <span class="lang-en">Linux Installation</span>
+            </h3>
+
+            <div class="product-desc">
+                <span class="lang-cs">Kompletní instalace vybrané distribuce Linuxu (s výběrem mohu pomoci). Zahrnuje základní nastavení a bezpečný chod systému. Ideální pro starší PC.</span>
+                <span class="lang-en">Complete installation of a selected Linux distribution (I can help you choose). Includes basic setup and secure system operation. Ideal for older PCs.</span>
+            </div>
+
+            <div class="product-bottom">
+                <span class="product-price">500 Kč</span>
+                <button class="btn-order" onclick="addToCart(500, 'Instalace Linuxu', 'Linux Installation')">
+                    <span class="lang-cs">Objednat</span>
+                    <span class="lang-en">Order</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="product-card">
+            <h3 class="product-title">
+                <span class="lang-cs">Instalace Windows 10/11</span>
+                <span class="lang-en">Windows 10/11 Installation</span>
+            </h3>
+
+            <div class="product-desc">
+                <span class="lang-cs">Čistá instalace operačního systému Windows. Součástí je instalace nejnovějších ovladačů, aktualizací a základních programů pro běžnou práci.</span>
+                <span class="lang-en">Clean installation of the Windows OS. Includes the latest drivers, updates, and essential software for daily tasks.</span>
+            </div>
+
+            <div class="product-bottom">
+                <span class="product-price">800 Kč</span>
+                <button class="btn-order" onclick="addToCart(800, 'Instalace Windows 10/11', 'Windows 10/11 Installation')">
+                    <span class="lang-cs">Objednat</span>
+                    <span class="lang-en">Order</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="product-card">
+            <h3 class="product-title">
+                <span class="lang-cs">Windows 11 na starší PC</span>
+                <span class="lang-en">Windows 11 on Unsupported PC</span>
+            </h3>
+
+            <div class="product-desc">
+                <span class="lang-cs">Odborná instalace Windows 11 na zařízení, která oficiálně nesplňují požadavky (např. chybějící TPM 2.0 nebo starší procesor).</span>
+                <span class="lang-en">Expert installation of Windows 11 on devices that officially do not meet the requirements (e.g., missing TPM 2.0 or older CPU).</span>
+            </div>
+
+            <div class="product-bottom">
+                <span class="product-price">1000 Kč</span>
+                <button class="btn-order" onclick="addToCart(1000, 'Windows 11 na starší PC', 'Windows 11 on Unsupported PC')">
+                    <span class="lang-cs">Objednat</span>
+                    <span class="lang-en">Order</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleLanguage() {
+            const body = document.body;
+            const btn = document.getElementById('langToggle');
+            body.classList.toggle('lang-en-active');
+
+            if (body.classList.contains('lang-en-active')) {
+                btn.innerText = 'CZ';
+            } else {
+                btn.innerText = 'EN';
+            }
+        }
+
+        function toggleMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('open');
+        }
+
+        let cart = [];
+
+        function toggleCart(forceOpen = false) {
+            const sidebar = document.getElementById('cartSidebar');
+
+            if (forceOpen === true) {
+                sidebar.classList.add('open');
+            } else {
+                sidebar.classList.toggle('open');
+            }
+        }
+
+        function addToCart(price, nameCs, nameEn) {
+            cart.push({ price: price, nameCs: nameCs, nameEn: nameEn });
+            updateCartUI();
+            toggleCart(true);
+        }
+
+        function removeFromCart(event, index) {
+            event.stopPropagation();
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const container = document.getElementById('cartItemsContainer');
+            container.innerHTML = '';
+            let originalSum = 0;
+
+            cart.forEach((item, index) => {
+                originalSum += item.price;
+                container.innerHTML += `
+                    <div class="cart-item">
+                        <div class="cart-item-info">
+                            <span>
+                                <span class="lang-cs">${item.nameCs}</span>
+                                <span class="lang-en">${item.nameEn}</span>
+                            </span>
+                            <span class="cart-item-price">${item.price} Kč</span>
+                        </div>
+                        <button class="remove-item-btn" onclick="removeFromCart(event, ${index})" title="Odebrat">✖</button>
+                    </div>
+                `;
+            });
+
+            let finalSum = originalSum;
+            let discount = 0;
+
+            if (cart.length > 1) {
+                finalSum = originalSum * 0.8;
+                discount = originalSum - finalSum;
+            }
+
+            document.getElementById('cartBadge').innerText = cart.length;
+            document.getElementById('originalPriceOut').innerText = originalSum;
+            document.getElementById('discountOut').innerText = discount;
+            document.getElementById('finalPriceOut').innerText = finalSum;
+        }
+
+        document.addEventListener('click', function(udalost) {
+            const menu = document.getElementById('mobileMenu');
+            const burgerBtn = document.querySelector('.hamburger-btn');
+            const cartSidebar = document.getElementById('cartSidebar');
+            const cartBtn = document.querySelector('.top-right-controls');
+
+            if (menu.classList.contains('open')) {
+                if (!menu.contains(udalost.target) && !burgerBtn.contains(udalost.target)) {
+                    menu.classList.remove('open');
+                }
+
+            }
+
+            if (cartSidebar.classList.contains('open')) {
+                if (!cartSidebar.contains(udalost.target) && !cartBtn.contains(udalost.target)) {
+                    cartSidebar.classList.remove('open');
+                }
+            }
+        });
+
+        function goToCheckout() {
+            if (cart.length === 0) {
+                const isEnglish = document.body.classList.contains('lang-en-active');
+                alert(isEnglish ? "Your cart is empty!" : "Váš košík je prázdný!");
+                return;
+            }
+
+            localStorage.setItem('osMarketplaceCart', JSON.stringify(cart));
+            
+            const isEnglish = document.body.classList.contains('lang-en-active');
+            localStorage.setItem('osMarketplaceLang', isEnglish ? 'en' : 'cs');
+            window.location.href = 'checkout.html';
+        }
+    </script>
+</body>
+</html>
