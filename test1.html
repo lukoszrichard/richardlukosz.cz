@@ -94,12 +94,14 @@
         }
     </style>
 </head>
-<body> <button class="hamburger-btn" onclick="toggleMenu()">☰</button>
-
-<nav class="mobile-menu" id="mobileMenu">
-    <a href="index.html" class="menu-link">Domů / Home</a>
-    <a href="test1.html" class="menu-link active">TEST</a>
-</nav>
+<body>
+    <button class="hamburger-btn" aria-label="Menu" onclick="toggleMenu()">☰</button>
+    <nav class="mobile-menu" id="mobileMenu">
+        <a href="index.html" class="menu-link">Domů / Home</a>
+        <a href="games.html" class="menu-link">Hry / Games</a>
+        <a href="os.html" class="menu-link">Operační systémy / OS</a>
+        <a href="test1.html" class="menu-link active">TEST</a>
+    </nav>
 
     <div class="lang-switcher">
         <button class="lang-btn" id="langToggle" onclick="toggleLanguage()">EN</button>
