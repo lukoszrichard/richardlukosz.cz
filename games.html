@@ -27,15 +27,71 @@
         h1 { font-size: 3rem; margin-bottom: 10px; }
         p { color: #aaa; margin-bottom: 30px; }
 
-        .lang-switcher { position: fixed; top: 20px; right: 20px; z-index: 100; }
-        .lang-btn { background: #333; color: #fff; border: 1px solid #555; padding: 8px 12px; cursor: pointer; border-radius: 5px; transition: 0.2s; }
-        .lang-btn:hover { background: #444; }
+        .lang-switcher {
+            position: fixed; 
+            top: 20px;
+            right: 20px;
+            z-index: 100; 
+        }
+        
+        .lang-btn {
+            background: #333;
+            color: #fff;
+            border: 1px solid #555;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            transition: 0.2s;
+        }
+        
+        .lang-btn:hover {
+            background: #444;
+        }
 
-        .hamburger-btn { position: fixed; top: 15px; left: 20px; background: none; border: none; color: #fff; font-size: 2rem; cursor: pointer; z-index: 100; }
-        .mobile-menu { position: fixed; top: 0; left: -100%; width: 250px; height: 100vh; background: #111; box-shadow: 5px 0 15px rgba(0,0,0,0.5); display: flex; flex-direction: column; padding: 80px 20px; box-sizing: border-box; transition: 0.3s ease; z-index: 99; }
-        .mobile-menu.open { left: 0; }
-        .menu-link { color: #888; font-size: 1.2rem; text-decoration: none; margin-bottom: 20px; transition: 0.2s; }
-        .menu-link:hover, .menu-link.active { color: #fff; }
+        .hamburger-btn {
+            position: fixed; 
+            top: 15px;
+            left: 20px;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 2rem;
+            cursor: pointer;
+            z-index: 100; 
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            left: -100%; 
+            width: 250px;
+            height: 100vh;
+            background: #111;
+            box-shadow: 5px 0 15px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            padding: 80px 20px;
+            box-sizing: border-box;
+            transition: 0.3s ease; 
+            z-index: 99;
+        }
+
+        .mobile-menu.open {
+            left: 0; 
+        }
+
+        .menu-link {
+            color: #888;
+            font-size: 1.2rem;
+            text-decoration: none;
+            margin-bottom: 20px;
+            transition: 0.2s;
+        }
+        
+        .menu-link:hover, .menu-link.active {
+            color: #fff;
+        }
 
         #game-selection {
             display: flex;
@@ -56,10 +112,10 @@
 
         .game-card:hover {
             transform: translateY(-5px);
-            border-color: #0000FF;
+            border-color: #8ab4f8;
         }
 
-        .game-card h2 { margin: 0 0 10px 0; color: #0000FF; }
+        .game-card h2 { margin: 0 0 10px 0; color: #8ab4f8; }
         .game-card p { margin: 0; font-size: 0.9rem; color: #ccc; }
 
         #game-container {
@@ -82,8 +138,8 @@
         .back-btn {
             margin-bottom: 20px;
             background: transparent;
-            color: #0000FF;
-            border: 1px solid #0000FF;
+            color: #8ab4f8;
+            border: 1px solid #8ab4f8;
             padding: 8px 16px;
             border-radius: 5px;
             cursor: pointer;
@@ -91,7 +147,7 @@
             transition: 0.2s;
         }
 
-        .back-btn:hover { background: #0000FF; color: #1a1a1a; }
+        .back-btn:hover { background: #8ab4f8; color: #1a1a1a; }
         
         #score-display, #level-display {
             font-size: 1.5rem;
@@ -99,7 +155,7 @@
             margin-top: 10px;
             color: #fff;
         }
-        #level-display { color: #0000FF; display: none; }
+        #level-display { color: #8ab4f8; display: none; }
     </style>
 </head>
 <body> 
@@ -118,6 +174,10 @@
             <span class="lang-cs">Vyberte si hru</span>
             <span class="lang-en">Choose a game</span>
         </h1>
+        <p>
+            <span class="lang-cs">Ve vývoji...</span>
+            <span class="lang-en">In development...</span>
+        </p>
         
         <div class="game-card" onclick="initDinoGame()">
             <h2>
@@ -310,7 +370,7 @@
             ctx.fillStyle = '#555';
             ctx.fillRect(0, 190, canvas.width, 10);
 
-            ctx.fillStyle = isGameOver ? '#FF0000' : '#0000FF';
+            ctx.fillStyle = isGameOver ? '#FF0000' : '#8ab4f8';
             ctx.fillRect(dino.x, dino.y, dino.w, dino.h);
 
             for (let obs of obstacles) {
@@ -469,7 +529,7 @@
                         bricks[c][r].x = brickX;
                         bricks[c][r].y = brickY;
                         
-                        ctx.fillStyle = '#0000FF';
+                        ctx.fillStyle = '#8ab4f8';
                         ctx.fillRect(brickX, brickY, brickWidth, brickHeight);
                     }
                 }
