@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>503 - Služba není k dispozici / Service unavailable</title>
+    <title>Projekty / Projects</title>
     <style>
         body { 
             font-family: sans-serif; 
@@ -11,12 +11,13 @@
             color: #fff; 
             display: flex; 
             flex-direction: column; 
-            justify-content: center; 
+            justify-content: flex-start; 
             align-items: center; 
             min-height: 100vh; 
             margin: 0; 
             text-align: center; 
-            padding: 40px 20px; 
+            position: relative;
+            padding: 80px 20px 40px 20px; 
             box-sizing: border-box;
         }
 
@@ -24,37 +25,89 @@
         body.lang-en-active .lang-cs { display: none; }
 
         h1 { 
-            font-size: 6rem; 
-            margin: 0; 
-            color: #555;
-            letter-spacing: 5px;
+            font-size: 3rem; 
+            margin-bottom: 20px; 
         }
-
-        h2 {
-            font-size: 2rem;
-            margin-top: 10px;
-            margin-bottom: 20px;
-        }
-
-        p {
-            color: #aaa;
+        
+        .github-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            background: #24292e;
+            color: #fff;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 8px;
             font-size: 1.1rem;
+            font-weight: bold;
+            border: 1px solid #444;
+            transition: 0.2s;
             margin-bottom: 40px;
         }
 
-        .back-btn {
-            background: #fff;
-            color: #1a1a1a;
-            text-decoration: none;
-            padding: 12px 24px;
-            border-radius: 5px;
-            font-size: 1rem;
-            font-weight: bold;
-            transition: 0.2s;
+        .github-btn:hover {
+            background: #333;
+            border-color: #8ab4f8;
         }
 
-        .back-btn:hover {
-            background: #ccc;
+        .github-icon {
+            fill: #fff;
+            width: 28px;
+            height: 28px;
+        }
+
+        .projects-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+            max-width: 800px;
+            text-align: left;
+        }
+
+        .project-card {
+            background: #222;
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 4px solid #8ab4f8;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: transform 0.2s;
+        }
+
+        .project-card:hover {
+            transform: translateX(5px);
+        }
+
+        .project-title {
+            color: #8ab4f8;
+            font-size: 1.4rem;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        .project-tags {
+            font-size: 0.8rem;
+            color: #aaa;
+            margin-bottom: 15px;
+            font-family: monospace;
+        }
+
+        .project-desc {
+            color: #ddd;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .project-link {
+            color: #8ab4f8;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .project-link:hover {
+            text-decoration: underline;
         }
 
         .lang-switcher {
@@ -78,30 +131,105 @@
         .lang-btn:hover {
             background: #444;
         }
+
+        .hamburger-btn {
+            position: fixed; 
+            top: 15px;
+            left: 20px;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 2rem;
+            cursor: pointer;
+            z-index: 100; 
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            left: -100%; 
+            width: 250px;
+            height: 100vh;
+            background: #111;
+            box-shadow: 5px 0 15px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            padding: 80px 20px;
+            box-sizing: border-box;
+            transition: 0.3s ease; 
+            z-index: 99;
+        }
+
+        .mobile-menu.open {
+            left: 0; 
+        }
+
+        .menu-link {
+            color: #888;
+            font-size: 1.2rem;
+            text-decoration: none;
+            margin-bottom: 20px;
+            transition: 0.2s;
+        }
+        
+        .menu-link:hover, .menu-link.active {
+            color: #fff;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2.7rem;
+            }
+        }
     </style>
 </head>
-<body>
+<body> 
+    <button class="hamburger-btn" aria-label="Menu" onclick="toggleMenu()">☰</button>
+    <nav class="mobile-menu" id="mobileMenu">
+        <a href="index.html" class="menu-link">Domů / Home</a>
+        <a href="projects.html" class="menu-link active">Projekty / Projects</a>
+        <a href="games.html" class="menu-link">Hry / Games</a>
+        <a href="os.html" class="menu-link">Operační systémy / OS</a>
+    </nav>
 
     <div class="lang-switcher">
         <button class="lang-btn" id="langToggle" onclick="toggleLanguage()">EN</button>
     </div>
 
-    <h1>503</h1>
-    
-    <h2>
-        <span class="lang-cs">Služba není k dispozici.</span>
-        <span class="lang-en">Service unavailable.</span>
-    </h2>
-    
-    <p>
-        <span class="lang-cs">Ve vývoji...</span>
-        <span class="lang-en">In development...</span>
-    </p>
+    <h1>
+        <span class="lang-cs">Bioinformatické projekty</span>
+        <span class="lang-en">Bioinformatics Projects</span>
+    </h1>
 
-    <a href="/" class="back-btn">
-        <span class="lang-cs">Zpět na domovskou stránku</span>
-        <span class="lang-en">Back to homepage</span>
+    <a href="https://github.com/lukoszrichard" target="_blank" rel="noopener noreferrer" class="github-btn">
+        <svg class="github-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+        </svg>
+        <span class="lang-cs">Můj GitHub Profil</span>
+        <span class="lang-en">My GitHub Profile</span>
     </a>
+
+    <!-- PROJEKTY -->
+    <div class="projects-container">
+        
+        <div class="project-card">
+            <h3 class="project-title">
+                <span class="lang-cs">Diferenciace druhů <i>Penicillium</i> pomocí MALDI-TOF MS</span>
+                <span class="lang-en">Differentiation of <i>Penicillium</i> Species Using MALDI-TOF MS</span>
+            </h3>
+            <div class="project-tags">R | Machine Learning | Bioinformatics</div>
+            <div class="project-desc">
+                <span class="lang-cs">Klasifikace a identifikace plísní rodu <i>Penicillium</i> (série <i>Viridicata</i>) s využitím dat z hmotnostní spektrometrie a algoritmů strojového učení.</span>
+                <span class="lang-en">Differentiation and classification of <i>Penicillium</i> species (Series <i>Viridicata</i>) using MALDI-TOF mass spectrometry data and machine learning algorithms.</span>
+            </div>
+            <a href="https://github.com/lukoszrichard/maldi-tof-penicillium-analysis" target="_blank" class="project-link">
+                <span class="lang-cs">Zobrazit repozitář →</span>
+                <span class="lang-en">View repository →</span>
+            </a>
+        </div>
+
+
+    </div>
 
     <script>
         function toggleLanguage() {
@@ -116,6 +244,22 @@
                 btn.innerText = 'EN';
             }
         }
+
+        function toggleMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('open');
+        }
+
+        document.addEventListener('click', function(udalost) {
+            const menu = document.getElementById('mobileMenu');
+            const burgerTlacitko = document.querySelector('.hamburger-btn');
+
+            if (menu.classList.contains('open')) {
+                if (!menu.contains(udalost.target) && !burgerTlacitko.contains(udalost.target)) {
+                    menu.classList.remove('open'); 
+                }
+            }
+        });
     </script>
 </body>
 </html>
