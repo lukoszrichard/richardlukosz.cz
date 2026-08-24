@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Úvod / Home</title>
+    <title>503</title>
     <style>
         body { 
             font-family: sans-serif; 
@@ -11,277 +11,41 @@
             color: #fff; 
             display: flex; 
             flex-direction: column; 
-            justify-content: flex-start; 
+            justify-content: center; 
             align-items: center; 
             min-height: 100vh; 
             margin: 0; 
             text-align: center; 
-            position: relative;
-            padding: 40px 20px 40px 20px; 
+            padding: 40px 20px; 
             box-sizing: border-box;
-        }
-
-        body:not(.lang-en-active) .lang-en { display: none; }
-        body.lang-en-active .lang-cs { display: none; }
-
-        .hero-container {
-            max-width: 700px;
-            margin-top: 10vh; 
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
         }
 
         h1 { 
-            font-size: 3rem;
-            margin: 0;
-            line-height: 1.1;
+            font-size: 6rem; 
+            margin: 0; 
+            color: #555;
+            letter-spacing: 5px;
         }
 
-        .subtitle {
-            font-size: 1.5rem;
-            color: #8af8c7;
-            margin-top: 0;
-            margin-bottom: 30px;
-            font-weight: bold;
-            font-family: monospace;
-        }
-
-        .bio {
-            color: #ddd;
-            line-height: 1.8;
-            font-size: 1.15rem;
-            margin-bottom: 40px;
-            text-align: center;
-        }
-
-        .skills-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-
-        .skill-badge {
-            background: #222;
-            border: 1px solid #444;
-            padding: 8px 18px;
-            border-radius: 20px;
-            font-size: 0.95rem;
-            color: #aaa;
-            font-family: monospace;
-            transition: 0.2s;
-        }
-        
-        .skill-badge:hover {
-            border-color: #8af8c7;
-            color: #fff;
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            text-decoration: none;
-            padding: 14px 28px;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            transition: 0.2s;
-            box-sizing: border-box;
-        }
-
-        .btn-primary {
-            background: #1a1a1a;
-            color: #fff;
-            border: 2px solid #8af8c7;
-        }
-
-        .btn-primary:hover {
-            background: #222;
-            border-color: #8af8c7;
-            color: #8af8c7;
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary {
-            background: #1a1a1a;
-            color: #fff;
-            border: 2px solid #444;
-        }
-
-        .btn-secondary:hover {
-            background: #222;
-            border-color: #8af8c7;
-            color: #8af8c7;
-            transform: translateY(-2px);
-        }
-
-        .github-icon {
-            fill: #fff;
-            width: 24px;
-            height: 24px;
-        }
-
-        .lang-switcher {
-            position: fixed;
-            top: 20px; right:
-            20px; z-index: 100;
-        }
-
-        .lang-btn {
-            background: #333;
-            color: #fff; border: 1px solid #555;
-            padding: 8px 12px;
-            cursor: pointer;
-            border-radius: 5px;
-            font-size: 0.9rem;
-            transition: 0.2s;
-        }
-
-        .lang-btn:hover { background: #444; }
-        
-        .hamburger-btn {
-            position: fixed;
-            top: 15px;
-            left: 20px;
-            background: none;
-            border: none;
-            color: #fff;
+        h2 {
             font-size: 2rem;
-            cursor: pointer;
-            z-index: 100;
-        }
-
-        .mobile-menu {
-            position: fixed;
-            top: 0;
-            left: -100%;
-            width: 250px;
-            height: 100vh;
-            background: #111;
-            box-shadow: 5px 0 15px rgba(0,0,0,0.5);
-            display: flex;
-            flex-direction: column;
-            padding: 80px 20px;
-            box-sizing: border-box;
-            transition: 0.3s ease;
-            z-index: 99;
-        }
-
-        .mobile-menu.open { left: 0; }
-
-        .menu-link {
-            color: #888;
-            font-size: 1.2rem;
-            text-decoration: none;
+            margin-top: 20px;
             margin-bottom: 20px;
-            transition: 0.2s;
-        }
-
-        .menu-link:hover, .menu-link.active { color: #fff; }
-
-        @media (max-width: 600px) {
-            .hero-container { margin-top: 5vh; }
-            h1 { font-size: 2.7rem; }
-            .subtitle { font-size: 1.2rem; }
-            .bio { text-align: left; } 
-            .action-buttons { flex-direction: column; width: 100%; gap: 10px; }
-            .btn { width: 100%; }
         }
 
     </style>
 </head>
-<body> 
-    <button class="hamburger-btn" aria-label="Menu" onclick="toggleMenu()">☰</button>
-    <nav class="mobile-menu" id="mobileMenu">
-        <a href="index.html" class="menu-link active">Domů / Home</a>
-        <a href="projects.html" class="menu-link">Projekty / Projects</a>
-    </nav>
+<body>
 
-    <div class="lang-switcher">
-        <button class="lang-btn" id="langToggle" onclick="toggleLanguage()">EN</button>
-    </div>
+    <h1>503</h1>
+    
+    <h2>
+        <span>V údržbě.</span>
+    </h2>
 
-    <div class="hero-container">
-        <h1>
-            <span class="lang-cs">Bc. Richard Lukosz</span>
-            <span class="lang-en">Richard Lukosz, Bc. (BSc)</span>
-        </h1>
-        
-        <div class="subtitle">
-            <span class="lang-cs">Student programu Molekulární biologie a biotechnologie</span>
-            <span class="lang-en">Student of Molecular Biology and Biotechnology</span>
-        </div>
-
-        <div class="skills-container">
-            <span class="skill-badge">MALDI-TOF MS</span>
-            <span class="skill-badge">Sanger sequencing</span>
-            <span class="skill-badge">R Language</span>
-            <span class="skill-badge">Statistics</span>
-            <span class="skill-badge">Machine learning</span>
-        </div>
-
-        <p class="bio">
-            <span class="lang-cs">
-                Molekulární biolog s praktickými zkušenostmi z akademického i zdravotnického prostředí se zaměřením na laboratorní diagnostiku, PCR, MALDI-TOF a sekvenační analýzy. Mám zkušenosti se zpracováním lidských, zvířecích i mikrobiálních vzorků, vyhodnocováním dat a dodržováním vysokých standardů kvality. Jsem všestranný, rychle se učím nové metodiky a zvládám precizní práci pod časovým tlakem.
-            </span>
-            <span class="lang-en">
-                Molecular Biologist with practical experience in both academic and clinical environments, specializing in laboratory diagnostics, PCR, MALDI-TOF, and sequencing analyses. Experienced in processing human, animal, and microbial samples, data evaluation, and maintaining high quality standards. Versatile, fast-learning, and capable of delivering precise work under pressure.
-            </span>
-        </p>
-
-        <div class="action-buttons">
-            <a href="projects.html" class="btn btn-primary">
-                <span class="lang-cs">Prohlédnout Projekty</span>
-                <span class="lang-en">View My Projects</span>
-            </a>
-            <a href="https://github.com/lukoszrichard" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
-                <svg class="github-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
-                </svg>
-                <span class="lang-cs">GitHub Profil</span>
-                <span class="lang-en">GitHub Profile</span>
-            </a>
-        </div>
-    </div>
-
-    <script>
-        function toggleLanguage() {
-            const body = document.body;
-            const btn = document.getElementById('langToggle');
-            body.classList.toggle('lang-en-active');
-            if (body.classList.contains('lang-en-active')) {
-                btn.innerText = 'CZ';
-            } else {
-                btn.innerText = 'EN';
-            }
-        }
-
-        function toggleMenu() {
-            const menu = document.getElementById('mobileMenu');
-            menu.classList.toggle('open');
-        }
-
-        document.addEventListener('click', function(udalost) {
-            const menu = document.getElementById('mobileMenu');
-            const burgerTlacitko = document.querySelector('.hamburger-btn');
-            if (menu.classList.contains('open')) {
-                if (!menu.contains(udalost.target) && !burgerTlacitko.contains(udalost.target)) {
-                    menu.classList.remove('open'); 
-                }
-            }
-        });
-    </script>
+    <h2>
+        <span>Under maintenance.</span>
+    </h2>
+    
 </body>
 </html>
